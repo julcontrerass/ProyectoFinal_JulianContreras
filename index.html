@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Gestor de Productos</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Gestor de Productos</h1>
+      <div class="form-container">
+        <input type="text" id="nombre" placeholder="Nombre del producto" />
+        <input type="number" id="valor" placeholder="Valor del producto" />
+        <select id="seccion">
+          <option value="">Seccion</option>
+          <option value="Verduras">Verduras</option>
+          <option value="Cereales y legumbres">Cereales y legumbres</option>
+          <option value="Frutos del mar">Frutos del mar</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Carnes y embutidos">Carnes y embutidos</option>
+          <option value="Frutas">Frutas</option>
+          <option value="Aperitivos">Snacks</option>
+          <option value="Aseo personal">Aseo personal</option>
+          <option value="Congelados">Congelados</option>
+          <option value="Condimentos">Condimentos</option>
+          <option value="Dulces y Repostería">Dulces y Repostería</option>
+          <option value="Limpieza">Limpieza</option>
+          <option value="Especias">Especias</option>
+          <option value="Otros objetos necesarios">
+            Otros objetos necesarios
+          </option>
+        </select>
+        <input type="number" id="stock" placeholder="Stock" />
+        <input type="file" id="imagen" />
+        <button class="Boton-agregar" id="agregar">Agregar Producto</button>
+      </div>
+      <input type="text" id="buscar" placeholder="Buscar producto" />
+      <button class="Boton-alf" id="buscar-btn">Buscar</button>
+      <select id="filtro-seccion">
+        <option value="todos">Seccion</option>
+        <option value="Verduras">Verduras</option>
+          <option value="Cereales y legumbres">Cereales y legumbres</option>
+          <option value="Frutos del mar">Frutos del mar</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Carnes y embutidos">Carnes y embutidos</option>
+          <option value="Frutas">Frutas</option>
+          <option value="Aperitivos">Snacks</option>
+          <option value="Aseo personal">Aseo personal</option>
+          <option value="Congelados">Congelados</option>
+          <option value="Condimentos">Condimentos</option>
+          <option value="Dulces y Repostería">Dulces y Repostería</option>
+          <option value="Limpieza">Limpieza</option>
+          <option value="Especias">Especias</option>
+          <option value="Otros objetos necesarios">
+            Otros objetos necesarios
+          </option>
+      </select>
+      <select id="ordenar">
+        <option value="precio">Filtrar precio</option>
+        <option value="ascendente">Menor a Mayor Precio</option>
+        <option value="descendente">Mayor a Menor Precio</option>
+      </select>
+      <button class="Boton-alf" id="filtrar-alfabeticamente">A-Z</button>
+      <div class="productos-container" id="productos-container">
+        <!-- Aca se muestran los productos -->
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
