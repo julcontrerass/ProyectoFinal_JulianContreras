@@ -9,10 +9,34 @@ document.addEventListener("DOMContentLoaded", () => {
   agregarBtn.addEventListener("click", agregarProducto);
   filtroSelect.addEventListener("change", filtrarProductos);
   buscarBtn.addEventListener("click", buscarProducto);
-  ordenarSelect.addEventListener("change", ordenarProductos); 
+  ordenarSelect.addEventListener("change", ordenarProductos);
 
-  const filtrarAlfabeticamenteBtn = document.getElementById("filtrar-alfabeticamente");
+  const filtrarAlfabeticamenteBtn = document.getElementById(
+    "filtrar-alfabeticamente"
+  );
   filtrarAlfabeticamenteBtn.addEventListener("click", filtrarAlfabeticamente);
+
+  // Cargar productos desde el archivo JSON
+  async function cargarProductosDesdeJSON() {
+    try {
+      const response = await fetch("productos.json"); 
+      if (!response.ok) {
+        throw new Error("No se pudo cargar el archivo JSON.");
+      }
+
+      const productos = await response.json();
+
+      // Almacenar los productos en el Local Storage
+      localStorage.setItem("productos", JSON.stringify(productos));
+
+      cargarProductos(); // Actualizar la lista de productos en la página
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // Llama a la función para cargar productos desde el archivo JSON
+  cargarProductosDesdeJSON();
 
   // Cargar productos del local storage al cargar la página
   cargarProductos();
@@ -26,7 +50,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const imagen = document.getElementById("imagen").files[0];
 
     // Validar campos
-    if (nombre && !isNaN(valor) && seccion && !isNaN(stock) && imagen) {
+    if (
+      nombre &&
+      !isNaN(valor) && // Verificar si el valor es un número
+      valor > 0 && // Verificar si el valor es positivo
+      seccion &&
+      !isNaN(stock) && // Verificar si el stock es un número
+      stock > 0 && // Verificar si el stock es positivo
+      imagen
+    ) {
       const reader = new FileReader();
       reader.onload = function () {
         const producto = {
@@ -57,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       Swal.fire({
         icon: "error",
         title: "Campos Incompletos",
-        text: "Por favor complete todos los campos.",
+        text: "Por favor complete todos los campos correctamente.",
       });
     }
   }
@@ -129,23 +161,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const productos = JSON.parse(localStorage.getItem("productos")) || [];
     const producto = productos[index];
 
-    producto.nombre = card.querySelector("p:nth-child(2)").textContent;
-    producto.valor = parseFloat(
+    const nuevoNombre = card.querySelector("p:nth-child(2)").textContent;
+    const nuevoValor = parseFloat(
       card.querySelector("p:nth-child(4)").textContent.split(": $")[1]
     );
-    producto.stock = parseInt(
+    const nuevoStock = parseInt(
       card.querySelector("p:nth-child(5)").textContent.split(": ")[1]
     );
 
-    localStorage.setItem("productos", JSON.stringify(productos));
+    // Validar que los nuevos valores de valor y stock sean números positivos
+    if (
+      !isNaN(nuevoValor) &&
+      nuevoValor > 0 &&
+      !isNaN(nuevoStock) &&
+      nuevoStock > 0
+    ) {
+      producto.nombre = nuevoNombre;
+      producto.valor = nuevoValor;
+      producto.stock = nuevoStock;
 
-    cargarProductos();
+      localStorage.setItem("productos", JSON.stringify(productos));
 
-    Swal.fire({
-      icon: "success",
-      title: "Producto Editado",
-      text: "El producto ha sido editado exitosamente.",
-    });
+      cargarProductos();
+
+      Swal.fire({
+        icon: "success",
+        title: "Producto Editado",
+        text: "El producto ha sido editado exitosamente.",
+      });
+    } else {
+      // Notificación SweetAlert de error si los valores no son válidos
+      Swal.fire({
+        icon: "error",
+        title: "Valores Inválidos",
+        text: "Por favor ingrese valores válidos y positivos para el precio y el stock.",
+      });
+    }
   }
 
   // Función para confirmar la eliminación de un producto
@@ -199,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Swal.fire({
           icon: "info",
           title: "Sin Resultados",
-          text: "No se encontraron productos en esta sección."
+          text: "No se encontraron productos en esta sección.",
         }).then(() => {
           cargarProductos();
         });
@@ -216,8 +267,8 @@ document.addEventListener("DOMContentLoaded", () => {
       productosContainer.appendChild(card);
     });
   }
-   // Función para ordenar productos por precio
-   function ordenarProductos() {
+  // Función para ordenar productos por precio
+  function ordenarProductos() {
     const orden = ordenarSelect.value;
 
     const productos = JSON.parse(localStorage.getItem("productos")) || [];
@@ -230,9 +281,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mostrarProductosFiltrados(productos);
   }
-  
-   // Función para filtrar productos alfabéticamente
-   function filtrarAlfabeticamente() {
+
+  // Función para filtrar productos alfabéticamente
+  function filtrarAlfabeticamente() {
     const productos = JSON.parse(localStorage.getItem("productos")) || [];
 
     productos.sort((a, b) => a.nombre.localeCompare(b.nombre)); // Ordenar alfabéticamente por nombre
@@ -240,7 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
     mostrarProductosFiltrados(productos);
   }
 
-  
   // Función para buscar productos por término de búsqueda
   function buscarProducto() {
     const terminoBusqueda = buscarInput.value.toLowerCase();

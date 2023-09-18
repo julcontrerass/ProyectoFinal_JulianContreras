@@ -1,0 +1,23 @@
+[
+  {
+    "nombre": "Doritos",
+    "valor": 1200,
+    "seccion": "Snacks",
+    "stock": 100,
+    "imagen": "./img/Doritos.png"
+  },
+  {
+    "nombre": "Pepitos",
+    "valor": 2300,
+    "seccion": "Galletas",
+    "stock": 6,
+    "imagen": "./img/Pepitos.png"
+  },
+  {
+    "nombre": "Head & Shoulders",
+    "valor": 1600,
+    "seccion": "Aseo personal",
+    "stock": 16,
+    "imagen": "./img/Shampoo.png"
+  }
+]
